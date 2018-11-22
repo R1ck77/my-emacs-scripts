@@ -1,10 +1,5 @@
-(defun integer-value (value)
-  "Return the value (if integer) or the bovine conversion if a string"
-  (if (integerp value)
-      value
-    (if (stringp value)
-        (string-to-number value)
-      (error "Only integers and strings cannot be converted"))))
+(defun increment-string (string)
+  (+ (string-to-number value) 1))
 
 (defun increment-valid-marker (marker)
   (let ((buffer (marker-buffer marker))
@@ -16,9 +11,11 @@
                       buffer)))))
 
 (defun increment-register-content (content)
-  (if (markerp content)
-      (increment-valid-marker content)
-    (+ (integer-value content) 1)))
+  (cond
+   ((markerp content) (increment-valid-marker content))
+   ((stringp content) (increment-string content))
+   (numberp content) (+ content 1)
+   (t (error "this type cannot be converted"))))
 
 (defun inc-register-as-number (register)
   "Increment the register
