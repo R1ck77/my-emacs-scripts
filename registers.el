@@ -30,9 +30,11 @@ Issue an error in all other scenarios"
                 (update-register-content (get-register register)
                                          (lambda (x) (+ x 1)))))
 
-;;;(defun update-register-as-number (register string-expr)
-;;;  (interactive "cRegister \nMExpression(x): ")
-;;;  (let* ((full-string-lambda (format "(lambda (x) %s)" string-expr))
-;;;         (lambda (eval full-string-lambda))))
-;;;  )
+(defun update-register-as-number (register string-expr)
+  (interactive "cRegister \nMExpression(x): ")
+  (let* ((full-string-lambda (format "(lambda (x) %s)" string-expr))
+         (f (eval (read full-string-lambda))))
+    (set-register register
+                  (update-register-content (get-register register)
+                                           f))))
 
