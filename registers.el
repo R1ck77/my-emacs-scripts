@@ -7,8 +7,8 @@
       (error "Only integers and strings cannot be converted"))))
 
 (defun increment-valid-marker (marker)
-  (let ((buffer (marker-buffer))
-        (position (marker-position)))
+  (let ((buffer (marker-buffer marker))
+        (position (marker-position marker)))
     (if (and buffer position)
         (with-current-buffer buffer
           (set-marker marker (min (point-max)
@@ -17,7 +17,7 @@
 
 (defun increment-register-content (content)
   (if (markerp content)
-      (increment-valid-marker register)
+      (increment-valid-marker content)
     (+ (integer-value content) 1)))
 
 (defun inc-register-as-number (register)
