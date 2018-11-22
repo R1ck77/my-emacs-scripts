@@ -1,20 +1,20 @@
-(defun increment-string (string)
-  (+ (string-to-number value) 1))
+(defun update-string (string lambda)
+  (number-to-string (funcall lambda  (string-to-number string))))
 
-(defun increment-valid-marker (marker)
+(defun update-valid-marker (marker lambda)
   (let ((buffer (marker-buffer marker))
         (position (marker-position marker)))
     (if (and buffer position)
         (with-current-buffer buffer
           (set-marker marker (min (point-max)
-                                  (+ marker 1))
+                                  (funcall lambda marker))
                       buffer)))))
 
-(defun increment-register-content (content)
+(defun update-register-content (content lambda )
   (cond
-   ((markerp content) (increment-valid-marker content))
-   ((stringp content) (increment-string content))
-   (numberp content) (+ content 1)
+   ((markerp content) (update-valid-marker content lambda))
+   ((stringp content) (update-string content lambda))
+   ((numberp content) (funcall lambda content))
    (t (error "this type cannot be converted"))))
 
 (defun inc-register-as-number (register)
@@ -27,5 +27,12 @@ Empty markers are silently ignored.
 Issue an error in all other scenarios"
   (interactive "cRegister: ")
   (set-register register
-                (increment-register-content (get-register register))))
+                (update-register-content (get-register register)
+                                         (lambda (x) (+ x 1)))))
+
+;;;(defun update-register-as-number (register string-expr)
+;;;  (interactive "cRegister \nMExpression(x): ")
+;;;  (let* ((full-string-lambda (format "(lambda (x) %s)" string-expr))
+;;;         (lambda (eval full-string-lambda))))
+;;;  )
 
