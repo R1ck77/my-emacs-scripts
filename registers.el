@@ -41,3 +41,11 @@ Issue an error in all other scenarios"
 (global-set-key (kbd "C-x r +") 'inc-register-as-number)
 (global-set-key (kbd "C-x r =") 'update-register-as-number)
 
+(defun set-useful-registers ()
+  "I sort of use those, with different frequency"
+  (set-register ?. "…")
+  (set-register ?o "✓")
+  (set-register ?k "❌")
+  (set-register ?i "∞")
+  (set-register ?- "—"))
+
