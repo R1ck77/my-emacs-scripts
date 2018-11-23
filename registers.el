@@ -25,16 +25,19 @@ If the register contains a marker with a position and buffer, increment the mark
 Empty markers are silently ignored.
 
 Issue an error in all other scenarios"
-  (interactive "cRegister: ")
+  (interactive "cIncrement register: ")
   (set-register register
                 (update-register-content (get-register register)
                                          (lambda (x) (+ x 1)))))
 
 (defun update-register-as-number (register string-expr)
-  (interactive "cRegister \nMExpression(x): ")
+  (interactive "cUpdate register: \nMWith expression(x): ")
   (let* ((full-string-lambda (format "(lambda (x) %s)" string-expr))
          (f (eval (read full-string-lambda))))
     (set-register register
                   (update-register-content (get-register register)
                                            f))))
+
+(global-set-key (kbd "C-x r +") 'inc-register-as-number)
+(global-set-key (kbd "C-x r =") 'update-register-as-number)
 
