@@ -20,9 +20,12 @@
 (defun kill-to-xclip (begin end region))
 
 (defun send-region-to-xclip (begin end &optional region)
-  (let ((content (buffer-substring begin end)))
-   (with-temp-buffer
-     (shell-command-on-region (point-min) (point-max) "xclip -in -selection clipboard"))))
+  (call-process-region begin end
+                       "bash"
+                       nil
+                       nil
+                       nil
+                       "-c" "xclip -in -selection clipboard"))
 
 (defun advise-kill ()
   (advice-add 'kill-ring-save
